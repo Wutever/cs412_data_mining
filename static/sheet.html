@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Essential Studio for JavaScript  theme reference -->
+        <link rel="stylesheet" href="http://cdn.syncfusion.com/17.3.0.9/js/web/flat-azure/ej.web.all.min.css" />
+        <!--  jquery script  -->
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="http://cdn.syncfusion.com/js/assets/external/jquery.globalize.min.js"></script>
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+        <!--  jsrender script  -->
+        <script src="http://cdn.syncfusion.com/js/assets/external/jsrender.min.js"></script>
+        <!-- Essential JS UI widget -->    
+        <script src="http://cdn.syncfusion.com/17.3.0.9/js/web/ej.web.all.min.js"></script>
+        <!--Add custom scripts here -->
+    </head>
+    <body>
+            <div id="Spreadsheet"></div>
+            <script type="text/javascript">
+                $(function () {
+                    $("#Spreadsheet").ejSpreadsheet({
+                    // ...
+                    sheets: [{
+                        // the datasource "window.defaultData" is referred from 'http://js.syncfusion.com/demos/web/scripts/xljsondata.js'
+                        dataSource: "http://js.syncfusion.com/demos/web/scripts/xljsondata.js"
+                    }],
+                    loadComplete: "loadComplete"
+                    // ...
+                });
+                });
+                function loadComplete() {                
+                     this.XLCFormat.setCFRule({ action: "greaterthan", inputs: ["10"], color: "redft", range: "D2:D8" });
+                }
+            </script>
+    </body>
+</html>
