@@ -2,6 +2,7 @@ import pandas as pd
 import itertools
 import pprint
 pp = pprint.PrettyPrinter(width = 200)
+import json
 
 def apriori(data, threshold, length):
     
@@ -9,13 +10,18 @@ def apriori(data, threshold, length):
         raise ValueError('Desired length of itemsets must be smaller or equal to number of attributes.')
         
     data, itemsets, attributes, candidates = apriori_1(data, threshold)
+    json_dict[1] = itemsets
     for n in range(2, length):
         data, itemsets, attributes, candidates = apriori_n(data, itemsets, attributes, candidates, threshold, n)
-        print('length-' + str(n) + ' itemsets:')
-        print(' ')
-        pp.pprint(itemsets)
-        print(' ')
-        print(' ')
+        #print('length-' + str(n) + ' itemsets:')
+        #print(' ')
+        #pp.pprint(itemsets)
+        #print(' ')
+        #print(' ')
+        temp_dict = {}
+        for key, value in itemsets.items():
+            temp_dict[str(key)] = value
+        json_dict[n] = temp_dict
     return data, itemsets, attributes, candidates
 
         
@@ -114,7 +120,12 @@ data = data.drop(columns = ['Unnamed: 0', 'PREVAILING_WAGE', 'YEAR', 'lon', 'lat
 data = data.dropna()
 n_rows = len(data.index)
 
-ret, itemsets, attributes, candidates = apriori(data, 0.001, 6)
+json_dict = {}
+
+apriori(data, 0.001, 6)
+
+json_str = json.dumps(json_dict)
+print(json_str)
 
 ####################################################### TODOs #######################################################
 
