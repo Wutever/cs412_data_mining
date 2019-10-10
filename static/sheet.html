@@ -9,27 +9,19 @@
         <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
         <!--  jsrender script  -->
         <script src="http://cdn.syncfusion.com/js/assets/external/jsrender.min.js"></script>
-        <!-- Essential JS UI widget -->    
+        <!-- Essential JS UI widget -->
         <script src="http://cdn.syncfusion.com/17.3.0.9/js/web/ej.web.all.min.js"></script>
         <!--Add custom scripts here -->
+
     </head>
     <body>
-            <div id="Spreadsheet"></div>
-            <script type="text/javascript">
-                $(function () {
-                    $("#Spreadsheet").ejSpreadsheet({
-                    // ...
-                    sheets: [{
-                        // the datasource "window.defaultData" is referred from 'http://js.syncfusion.com/demos/web/scripts/xljsondata.js'
-                        dataSource: "http://js.syncfusion.com/demos/web/scripts/xljsondata.js"
-                    }],
-                    loadComplete: "loadComplete"
-                    // ...
-                });
-                });
-                function loadComplete() {                
-                     this.XLCFormat.setCFRule({ action: "greaterthan", inputs: ["10"], color: "redft", range: "D2:D8" });
-                }
-            </script>
+    <div class='container'>
+    <h3>Test</h3>
+        <form>
+            <a id=test><button class='btn btn-default'>apriori</button></a>
+        </form>
+    </div>
+        <div id="Spreadsheet"></div>
+            <script src="logic.js"></script>
     </body>
 </html>
