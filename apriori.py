@@ -5,10 +5,10 @@ pp = pprint.PrettyPrinter(width = 200)
 import json
 
 def apriori(data, threshold, length):
-    
+
     if length > len(data.columns)+1:
         raise ValueError('Desired length of itemsets must be smaller or equal to number of attributes.')
-        
+
     data, itemsets, attributes, candidates = apriori_1(data, threshold)
     json_dict[1] = itemsets
     for n in range(2, length):
@@ -24,9 +24,9 @@ def apriori(data, threshold, length):
         json_dict[n] = temp_dict
     return data, itemsets, attributes, candidates
 
-        
+
 def apriori_1(data, threshold):
-    
+
     itemsets = {}
     for i in range(len(data.columns)):
         column = data.iloc[:, i]
@@ -35,23 +35,23 @@ def apriori_1(data, threshold):
         items = list(frequent.index)
         name = frequent.name
         itemsets[name] = items
-        
+
     attributes = {}
     for key, value in itemsets.items():
         attributes[key] = set(value)
-        
+
     reverse = {}
     for key, value in itemsets.items():
         for item in value:
             reverse[item] = key
-        
+
     candidates = set([])
     for single_comb in list(itertools.combinations(attributes.keys(), 2)):
-        
+
         list_list = []
         for col in list(single_comb):
             list_list.append(list(attributes[col]))
-            
+
         for one in list(itertools.product(*list_list)):
             check = one
             flag = 0
@@ -61,7 +61,7 @@ def apriori_1(data, threshold):
                     break
             if flag == 0:
                 candidates.add(one)
-        
+
     return data, itemsets, attributes, candidates
 
 
@@ -69,7 +69,7 @@ def apriori_n(data, length_nminus1_itemsets, attribute_list, length_n_candidates
 
     for key, value in attribute_list.items():
         data = data[data[key].isin(value)]
-        
+
     itemsets = {}
     for item in list(itertools.combinations(attribute_list.keys(), n)):
         if 'CASE_STATUS' in item:
@@ -79,7 +79,7 @@ def apriori_n(data, length_nminus1_itemsets, attribute_list, length_n_candidates
         for index in grouped[grouped[grouped.index] == True].index:
             frequent.append(index)
         itemsets[item] = frequent
-    
+
     attributes = {}
     for key, arr in itemsets.items():
         for k in key:
@@ -90,19 +90,19 @@ def apriori_n(data, length_nminus1_itemsets, attribute_list, length_n_candidates
                 for i in range(len(value)):
                     attributes[key[i]].add(value[i])
                     attributes[key[i]].add(value[i])
-                    
+
     reverse = {}
     for key, value in itemsets.items():
         for item in value:
             reverse[item] = key
-            
+
     candidates = set([])
     for single_comb in list(itertools.combinations(attribute_list.keys(), n+1)):
-        
+
         list_list = []
         for col in list(single_comb):
             list_list.append(list(attribute_list[col]))
-            
+
         for one in list(itertools.product(*list_list)):
             check = list(itertools.combinations(list(one), n))
             flag = 0
@@ -112,20 +112,25 @@ def apriori_n(data, length_nminus1_itemsets, attribute_list, length_n_candidates
                     break
             if flag == 0:
                 candidates.add(one)
-    
+
     return data, itemsets, attributes, candidates
+
 
 data = pd.read_csv('h1b_kaggle.csv', na_values = 'NaN')
 data = data.drop(columns = ['Unnamed: 0', 'PREVAILING_WAGE', 'YEAR', 'lon', 'lat'])
 data = data.dropna()
 n_rows = len(data.index)
-
 json_dict = {}
-
 apriori(data, 0.001, 6)
+col1 = "frequent pair1"
+col2 = "frequent pair2"
+frequent = 1
 
-json_str = json.dumps(json_dict)
-print(json_str)
+s = pprint.pformat(json_dict)
+#json_str = json.dumps(list(json_dict.values()))
+
+def processData():
+    return(s)
 
 ####################################################### TODOs #######################################################
 

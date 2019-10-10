@@ -1,6 +1,6 @@
-// var a = [{"value": "foo", "key": [1, 2]}];
+var a
 $(document).ready(function(){
-        $.getJSON('/apriori',
+        $.getJSON('/start',
             function (data) {
                 //do nothing
                 var excelObj = $("#Spreadsheet").data("ejSpreadsheet");
@@ -22,7 +22,7 @@ $("#Spreadsheet").ejSpreadsheet({
     scrollSettings: {
         allowScrolling: true,
         height: 600,
-        width: 1200
+        width: 950
     },
     loadComplete: "loadComplete",
     cellClick: function (args) {
@@ -47,17 +47,10 @@ function cellClick(args) {
 
 $(function () {
     $('a#test').bind('click', function () {
-        $.getJSON('/apriori',
-            function (data) {
-                //do nothing
-
-                var excelObj = $("#Spreadsheet").data("ejSpreadsheet");
-                var array =Object.values(data);
-                var settings = { dataSource: array, showHeader: "true", startCell: "A1" };
-                excelObj.updateRange(1, settings);
-                excelObj.XLResize.fitWidth([...Array(15).keys()].map(x => x++))
-            });
-
+        $.get("/apriori", function (data, status) {
+            var newline = String.fromCharCode(13, 10);
+            $("#Textarea").val(data);
+        });
         return false;
     });
 });
