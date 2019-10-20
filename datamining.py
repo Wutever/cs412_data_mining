@@ -7,22 +7,31 @@ from apriori import processData
 
 app = Flask(__name__)
 
+csv_file = os.path.join(os.getcwd(), "parsed1.json")
+
+
+@app.route('/getjson')
+def getjson():
+
+    return ""
+
 
 @app.route('/apriori')
 def apriori():
     return processData()
 
+
 @app.route('/start')
 def start():
-    with open(os.path.join(os.getcwd(),"parsed1.json"),"r") as file:
+    with open(csv_file, "r") as file:
         data = json.load(file)
     return data
+
 
 @app.route('/')
 def hello():
     name = request.args.get("name", "World")
     return f'Hello, {escape(name)}!'
-
 
 
 @app.route('/index')

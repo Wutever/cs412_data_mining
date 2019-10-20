@@ -1,35 +1,89 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <!-- Essential Studio for JavaScript  theme reference -->
-        <link rel="stylesheet" href="http://cdn.syncfusion.com/17.3.0.9/js/web/flat-azure/ej.web.all.min.css" />
-        <!--  jquery script  -->
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-        <script src="http://cdn.syncfusion.com/js/assets/external/jquery.globalize.min.js"></script>
-        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
-        <!--  jsrender script  -->
-        <script src="http://cdn.syncfusion.com/js/assets/external/jsrender.min.js"></script>
-        <!-- Essential JS UI widget -->
-        <script src="http://cdn.syncfusion.com/17.3.0.9/js/web/ej.web.all.min.js"></script>
-        <!--Add custom scripts here -->
-    </head>
-    <body>
-    <div class='container'>
-    <h3>Test</h3>
-        <form>
-            <a id=test><button class='btn btn-default'>apriori</button></a>
-        </form>
-    </div>
-    <div class="aParent">
-<div style="float:left;width:65%;" id="Spreadsheet"></div>
-    <div style="float:right;width:35%;">
-            <textarea rows="100`" cols="100" id = "Textarea">
+<head>
+    <!-- Essential Studio for JavaScript  theme reference -->
+    <link rel="stylesheet" href="http://cdn.syncfusion.com/17.3.0.9/js/web/flat-azure/ej.web.all.min.css"/>
+    <!--  jquery script  -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://cdn.syncfusion.com/js/assets/external/jquery.globalize.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+    <!--  jsrender script  -->
+    <script src="http://cdn.syncfusion.com/js/assets/external/jsrender.min.js"></script>
+    <!-- Essential JS UI widget -->
+    <script src="http://cdn.syncfusion.com/17.3.0.9/js/web/ej.web.all.min.js"></script>
+    <!--Add custom scripts here -->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .header {
+            min-height: 8vh;
+            border: 1px solid red;
+            padding: 15px;
+        }
+
+        .scheme {
+            width: 50%;
+            min-height: 5vh;
+            float: left;
+            padding: 15px;
+            border: 1px solid red;
+        }
+
+        .menu {
+            width: 75%;
+            float: left;
+            padding: 15px;
+            border: 1px solid red;
+        }
+
+        .main {
+            width: 50%;
+            min-height: 42vh;
+            float: left;
+            padding: 15px;
+            border: 1px solid red;
+        }
+
+        .side {
+            width: 25%;
+            min-height: 42vh;
+            float: left;
+            padding: 30px;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Data Mining SpreadSheet</h1>
+</div>
+<div class=scheme>
+    <form>
+        <a id=test>
+            <button class='btn btn-default'>apriori</button>
+        </a>
+    </form>
+</div>
+<div class=scheme>
+</div>
+<div class=main>
+    <p>Visualization 1</p>
+</div>
+<div class=main>
+    <p>Visualization 2</p>
+    <textarea rows="23`" cols="100" id="Textarea">
 
         </textarea>
+</div>
+<div class='menu' id="Spreadsheet"></div>
+<div class=side>
+    <p>choose column</p>
+    <div id="defaultListView" data-ej-allowScrolling=true>
+
     </div>
 </div>
-
-
-            <script src="logic.js"></script>
-    </body>
+<script src="logic.js"></script>
+</body>
 </html>

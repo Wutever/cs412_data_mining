@@ -1,3 +1,6 @@
 .vscode/
 env/
 __pycache__/
+.idea/
+venv/
+*.csv

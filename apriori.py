@@ -126,11 +126,13 @@ col1 = "frequent pair1"
 col2 = "frequent pair2"
 frequent = 1
 
-s = pprint.pformat(json_dict)
+
 #json_str = json.dumps(list(json_dict.values()))
 
 def processData():
-    return(s)
+
+    #s = pprint.pformat(json_dict)
+    return(json_dict)
 
 ####################################################### TODOs #######################################################
 

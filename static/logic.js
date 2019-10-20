@@ -13,18 +13,12 @@ $(document).ready(function(){
         return false;
     });
 $("#Spreadsheet").ejSpreadsheet({
-    // ...
-    // sheets: [{
-    //     dataSource: a,
-    //     // query: ej.Query().take(50).select(["OrderID", "CustomerID", "EmployeeID", "ShipName", "ShipAddress"]),
-    //     // primaryKey: "OrderID"
-    // }],
     scrollSettings: {
         allowScrolling: true,
-        height: 600,
-        width: 950
+        allowSheetOnDemand: true,
+        width: "70%",
+        isResponsive: false
     },
-    loadComplete: "loadComplete",
     cellClick: function (args) {
         var rowIndex = args.rowIndex;
         var colIndex = args.columnIndex;
@@ -37,20 +31,52 @@ $("#Spreadsheet").ejSpreadsheet({
     // ...
 });
 
-function loadComplete() {
-    this.XLCFormat.setCFRule({action: "greaterthan", inputs: ["10"], color: "redft", range: "D2:D8"});
-}
-
+$(function () {
+            $("#defaultListView").ejListView({ showHeader: true, showHeaderBackButton: true, headerTitle: "Check Frequent Item set",height:350, enableGroupList:true });
+        });
 function cellClick(args) {
     jQuery.addEventLog("Spreadsheet <span class='eventTitle'>cellClick</span> event called");
 }
 
 $(function () {
     $('a#test').bind('click', function () {
+
         $.get("/apriori", function (data, status) {
-            var newline = String.fromCharCode(13, 10);
-            $("#Textarea").val(data);
-        });
+            debugger;
+            var dataItem = []
+            var primaryKey = 1
+            for (var freqNum in data){
+                dataItem.push({"text" : primaryKey.toString(),"primaryKey" : primaryKey.toString()})
+                var primaryKeySecond = primaryKey +1;
+                for(var itemName in data[freqNum] ){
+                    dataItem.push({"text" :itemName,"primaryKey" : primaryKeySecond.toString(), "parentPrimaryKey":primaryKey.toString()});
+                    var nameArray = data[freqNum][itemName]
+                    for (var element in data[freqNum][itemName][nameArray])
+
+                }
+            }
+
+
+                var dataSourceItem =
+                [{ "Texts": "Discover Music", "PrimaryKeys": "1" },
+                    { "Texts": "Hot Singles", "PrimaryKeys": "2","ParentPrimaryKeys": "1" },
+                    { "Texts": "Rising Artists", "PrimaryKeys": null, "ParentPrimaryKeys": "3" },
+                    { "Texts": "Live Music", "ParentPrimaryKeys": "1" },
+                    { "Texts": "Best of 2013 So Far", "ParentPrimaryKeys": "1" },
+                { "Texts": "Sales and Events", "PrimaryKeys": "2" },
+                    { "Texts": "100 Albums - $5 Each", "ParentPrimaryKeys": "2" },
+                    { "Texts": "Hip-Hop and R&amp;B Sale", "ParentPrimaryKeys": "2" },
+                    { "Texts": "CD Deals", "ParentPrimaryKeys": "2" }];
+               var musicFields = {
+                "href": "Hrefs",
+                "text": "Texts",
+                "primaryKey": "PrimaryKeys",
+                "parentPrimaryKey": "ParentPrimaryKeys"
+                };
+                $(function(){
+                $("#defaultListView").ejListView({fieldSettings:musicFields,dataSource:dataSourceItem});
+                });
+                });
         return false;
     });
 });
