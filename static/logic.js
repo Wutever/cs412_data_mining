@@ -1,4 +1,4 @@
-var a
+var itemSet_Frequency = []
 $(document).ready(function(){
         $.getJSON('/start',
             function (data) {
@@ -32,51 +32,88 @@ $("#Spreadsheet").ejSpreadsheet({
 });
 
 $(function () {
-            $("#defaultListView").ejListView({ showHeader: true, showHeaderBackButton: true, headerTitle: "Check Frequent Item set",height:350, enableGroupList:true });
+            $("#defaultListView").ejListView({
+                showHeader: true,
+                showHeaderBackButton: true,
+                headerTitle: "Check Frequent Item set",
+                height:400,
+                enableGroupList:true,
+
+            });
         });
 function cellClick(args) {
     jQuery.addEventLog("Spreadsheet <span class='eventTitle'>cellClick</span> event called");
 }
+$(function () {
+    $("#container1").ejChart({
+        title: {
+	           //Add chart title
+               text: 'Frequent Support Item Set'
+	        },
+         series: [{
+           marker: {
+             dataLabel: {
+                //Enable data label in the chart
+                visible: true
+           } }
+         }],
+        primaryXAxis: {
+                font : {
+                        fontFamily : 'Segoe UI',
+                        size : '10px',
+                },
+            }
+    });
+    $("#container2").ejChart({
+        title: {
+	           //Add chart title
+               text: 'Frequent Support Item Set'
+	        },
+         series: [{
+           marker: {
+             dataLabel: {
+                //Enable data label in the chart
+                visible: true
+           } }
+         }],
+        primaryXAxis: {
+                font : {
+                        fontFamily : 'Segoe UI',
+                        size : '10px',
+                },
+            }
+    });
+});
 
+//update to listview with aporir
 $(function () {
     $('a#test').bind('click', function () {
 
         $.get("/apriori", function (data, status) {
-            debugger;
             var dataItem = []
             var primaryKey = 1
             for (var freqNum in data){
-                dataItem.push({"text" : primaryKey.toString(),"primaryKey" : primaryKey.toString()})
+                dataItem.push({"text" :`${freqNum} item set`,"primaryKey" : primaryKey.toString()})
                 var primaryKeySecond = primaryKey +1;
+                var freqSize = [];
                 for(var itemName in data[freqNum] ){
                     dataItem.push({"text" :itemName,"primaryKey" : primaryKeySecond.toString(), "parentPrimaryKey":primaryKey.toString()});
-                    var nameArray = data[freqNum][itemName]
-                    for (var element in data[freqNum][itemName][nameArray])
-
+                    freqSize.push({"ItemSizeName" : itemName.replace(/,/g,"<br>").replace(/[{(')}]/g, ''), "Count" : data[freqNum][itemName].length});
+                    for (var i = 0; i < data[freqNum][itemName].length; i++){
+                        dataItem.push({"text": data[freqNum][itemName][i], "parentPrimaryKey": primaryKeySecond.toString()})
+                    }
+                    primaryKeySecond ++;
                 }
+                itemSet_Frequency.push(freqSize);
+                primaryKey = primaryKeySecond;
             }
 
+            $(function(){
+                $("#defaultListView").ejListView({dataSource:dataItem});
+            });
 
-                var dataSourceItem =
-                [{ "Texts": "Discover Music", "PrimaryKeys": "1" },
-                    { "Texts": "Hot Singles", "PrimaryKeys": "2","ParentPrimaryKeys": "1" },
-                    { "Texts": "Rising Artists", "PrimaryKeys": null, "ParentPrimaryKeys": "3" },
-                    { "Texts": "Live Music", "ParentPrimaryKeys": "1" },
-                    { "Texts": "Best of 2013 So Far", "ParentPrimaryKeys": "1" },
-                { "Texts": "Sales and Events", "PrimaryKeys": "2" },
-                    { "Texts": "100 Albums - $5 Each", "ParentPrimaryKeys": "2" },
-                    { "Texts": "Hip-Hop and R&amp;B Sale", "ParentPrimaryKeys": "2" },
-                    { "Texts": "CD Deals", "ParentPrimaryKeys": "2" }];
-               var musicFields = {
-                "href": "Hrefs",
-                "text": "Texts",
-                "primaryKey": "PrimaryKeys",
-                "parentPrimaryKey": "ParentPrimaryKeys"
-                };
-                $(function(){
-                $("#defaultListView").ejListView({fieldSettings:musicFields,dataSource:dataSourceItem});
-                });
-                });
+
+            });
         return false;
     });
 });

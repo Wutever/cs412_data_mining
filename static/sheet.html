@@ -19,7 +19,6 @@
 
         .header {
             min-height: 8vh;
-            border: 1px solid red;
             padding: 15px;
         }
 
@@ -28,14 +27,12 @@
             min-height: 5vh;
             float: left;
             padding: 15px;
-            border: 1px solid red;
         }
 
         .menu {
             width: 75%;
             float: left;
             padding: 15px;
-            border: 1px solid red;
         }
 
         .main {
@@ -43,7 +40,7 @@
             min-height: 42vh;
             float: left;
             padding: 15px;
-            border: 1px solid red;
+            grid-template-rows: 50% 50%;
         }
 
         .side {
@@ -51,7 +48,6 @@
             min-height: 42vh;
             float: left;
             padding: 30px;
-            border: 1px solid red;
         }
     </style>
 </head>
@@ -62,20 +58,23 @@
 <div class=scheme>
     <form>
         <a id=test>
-            <button class='btn btn-default'>apriori</button>
+            <button class='btn btn-default'>Apriori</button>
+            <form>
+          Iteration:
+          <input type="text" name="Iteration" value="20">
+          Support:
+          <input type="text" name="Support" value="5">
+          <input type="submit" value="Execute">
+        </form>
         </a>
     </form>
 </div>
 <div class=scheme>
 </div>
-<div class=main>
-    <p>Visualization 1</p>
+<div class=main id="container1" >
 </div>
 <div class=main>
-    <p>Visualization 2</p>
-    <textarea rows="23`" cols="100" id="Textarea">
-
-        </textarea>
+<div id="container2" ></div>
 </div>
 <div class='menu' id="Spreadsheet"></div>
 <div class=side>
@@ -84,6 +83,23 @@
 
     </div>
 </div>
+
+<script>
+$(document).ready(function(){
+    $("#defaultListView").ejListView({
+        mouseDown: function (args) { //handle the event
+                    debugger
+            $("#container1").ejChart({
+                 series: [{
+                     dataSource: itemSet_Frequency[args.index],
+                  xName: "ItemSizeName",
+                    yName: "Count"
+                 }]
+            });
+        }
+    });
+});
+</script>
 <script src="logic.js"></script>
 </body>
 </html>
