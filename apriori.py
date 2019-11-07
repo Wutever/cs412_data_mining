@@ -9,9 +9,11 @@ def apriori(data, threshold, length, columns = None):
     
     if columns != None:
         data = data[columns]
-    if length > len(data.columns)+1:
-        raise ValueError('Desired length of itemsets must be smaller or equal to number of attributes.')
-        
+    #if length > len(data.columns)+1:
+    #    raise ValueError('Desired length of itemsets must be smaller or equal to number of attributes.')
+    if length > len(data.columns):
+    	length = len(data.columns)
+
     data, itemsets, attributes, candidates = apriori_1(data, threshold)
     json_dict[1] = itemsets
     for n in range(2, length):
