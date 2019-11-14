@@ -52,6 +52,11 @@ function cellClick(args) {
 }
 $(function () {
     $("#container1").ejChart({
+        pointRegionClick: function (args) {
+         debugger;
+         console.log(args)
+        },
+        zooming: {enable: true},
         title: {
 	           //Add chart title
                text: 'Frequent Support Item Set'
@@ -61,10 +66,16 @@ $(function () {
              dataLabel: {
                 //Enable data label in the chart
                 visible: true
-           } } ,
-              tooltip: {
+             }
+           },
+          tooltip: {
                visible: true
-           }
+           },
+            selectionSettings: {
+             // enable the selection settings
+             mode: 'point',
+             enable: true
+          }
          }],
         primaryXAxis: {
             labelIntersectAction : 'trim',
