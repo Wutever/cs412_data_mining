@@ -1,4 +1,7 @@
-var itemSet_Frequency = []
+var itemSet_Frequency = [];
+var realItemSetFrequency = [];
+var isSecond = 0;
+var firstIndex;
 $(document).ready(function(){
         $.getJSON('/start',
             function (data) {
@@ -23,8 +26,11 @@ $("#Spreadsheet").ejSpreadsheet({
         var rowIndex = args.rowIndex;
         var colIndex = args.columnIndex;
         var value = args.value; // if we want to know the clicked cell rowIndex and columnIndex and value
-        console.log(rowIndex);
-        console.log(colIndex);
+        debugger;
+        var columnList = $('input[name=Columns]').val();
+        if(columnList!=="")columnList=columnList.concat(",");
+        columnList=columnList.concat(value);
+        $('input[name=Columns]').val(columnList);
         console.log(value)
     },
     showRibbon: false
@@ -55,9 +61,13 @@ $(function () {
              dataLabel: {
                 //Enable data label in the chart
                 visible: true
-           } }
+           } } ,
+              tooltip: {
+               visible: true
+           }
          }],
         primaryXAxis: {
+            labelIntersectAction : 'trim',
                 font : {
                         fontFamily : 'Segoe UI',
                         size : '10px',
@@ -87,21 +97,34 @@ $(function () {
 
 //update to listview with aporir
 $(function () {
-    $('a#test').bind('click', function () {
+    $( "#target" ).submit(function () {
 
-        $.get("/apriori", function (data, status) {
-            var dataItem = []
-            var primaryKey = 1
+
+        debugger;
+        var $inputs = $('#target :input');
+        var values = {};
+        $inputs.each(function() {
+            values[this.name] = $(this).val();
+        });
+        $.post("/apriori", values,  function (data, status) {
+            debugger;
+            data = JSON.parse(data);
+            var dataItem = [];
+            var primaryKey = 1;
             for (var freqNum in data){
-                dataItem.push({"text" :`${freqNum} item set`,"primaryKey" : primaryKey.toString()})
+                dataItem.push({"text" :`${freqNum} item set`,"primaryKey" : primaryKey.toString()});
                 var primaryKeySecond = primaryKey +1;
                 var freqSize = [];
                 for(var itemName in data[freqNum] ){
-                    dataItem.push({"text" :itemName,"primaryKey" : primaryKeySecond.toString(), "parentPrimaryKey":primaryKey.toString()});
-                    freqSize.push({"ItemSizeName" : itemName.replace(/,/g,"<br>").replace(/[{(')}]/g, ''), "Count" : data[freqNum][itemName].length});
-                    for (var i = 0; i < data[freqNum][itemName].length; i++){
-                        dataItem.push({"text": data[freqNum][itemName][i], "parentPrimaryKey": primaryKeySecond.toString()})
+                    dataItem.push({"text" :itemName.replace(/[{(')}]/g, ''),"primaryKey" : primaryKeySecond.toString(), "parentPrimaryKey":primaryKey.toString()});
+                    var freqSizeItem = [];
+                    var subFreqSizeItem = [];
+                    for (var realItemName in  data[freqNum][itemName]){
+                        var primaryKeyThird  = primaryKeySecond + 1;
+                        dataItem.push({"text": realItemName.replace(/[{(')}]/g, ''), "parentPrimaryKey": primaryKeySecond.toString()})
+                        subFreqSizeItem.push({"ItemSizeName": realItemName.replace(/,/g,"<br>").replace(/[{(')}]/g, ''), "Count":  data[freqNum][itemName][realItemName]})
                     }
+                    freqSize.push({"ItemSizeName" : itemName.replace(/,/g,"<br>").replace(/[{(')}]/g, ''), "Count" : subFreqSizeItem});
                     primaryKeySecond ++;
                 }
                 itemSet_Frequency.push(freqSize);

@@ -56,17 +56,14 @@
     <h1>Data Mining SpreadSheet</h1>
 </div>
 <div class=scheme>
-    <form>
-        <a id=test>
-            <button class='btn btn-default'>Apriori</button>
-            <form>
-          Iteration:
-          <input type="text" name="Iteration" value="20">
-          Support:
-          <input type="text" name="Support" value="5">
+    <form id="target" >
+          Support in Ratio:
+          <input type="text" name="Support in Ratio" value="0.001">
+          Maximum Item Set:
+          <input type="text" name="Maximum Item Set" value="5">
+        Columns:
+        <input type="text" name="Columns">
           <input type="submit" value="Execute">
-        </form>
-        </a>
     </form>
 </div>
 <div class=scheme>
@@ -88,14 +85,34 @@
 $(document).ready(function(){
     $("#defaultListView").ejListView({
         mouseDown: function (args) { //handle the event
-                    debugger
-            $("#container1").ejChart({
+            debugger;
+            if(isSecond === 0){
+                isSecond = 1;
+                firstIndex= args.index;
+                tmpdata = []
+                for( var entry in itemSet_Frequency[args.index]){
+                      tmpdata.push({"ItemSizeName" : itemSet_Frequency[args.index][entry]["ItemSizeName"], "Count" :  itemSet_Frequency[args.index][entry]["Count"].length});
+                }
+
+                $("#container1").ejChart({
                  series: [{
-                     dataSource: itemSet_Frequency[args.index],
+                     dataSource: tmpdata,
                   xName: "ItemSizeName",
                     yName: "Count"
                  }]
             });
+            }
+            else{
+                 isSecond = 0;
+                 $("#container1").ejChart({
+                 series: [{
+                     dataSource: itemSet_Frequency[firstIndex][args.index]["Count"],
+                  xName: "ItemSizeName",
+                    yName: "Count"
+                 }]
+            });
+            }
+
         }
     });
 });

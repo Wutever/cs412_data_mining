@@ -16,9 +16,13 @@ def getjson():
     return ""
 
 
-@app.route('/apriori')
+@app.route('/apriori', methods=['POST'])
 def apriori():
-    return processData()
+    support = request.values["Support in Ratio"]
+    itemSize = request.values["Maximum Item Set"]
+    column = request.values["Columns"]
+
+    return processData(float(support), int(itemSize), column.split(","))
 
 
 @app.route('/start')
