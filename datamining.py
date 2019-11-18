@@ -24,6 +24,13 @@ def apriori():
 
     return processData(float(support), int(itemSize), column.split(","))
 
+@app.route('/kmeans', methods=['POST'])
+def kmeans():
+    data = []
+    for value in request.values.values():
+        data.append(value)
+    return
+
 
 @app.route('/start')
 def start():

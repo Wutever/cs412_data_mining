@@ -2,6 +2,9 @@ var itemSet_Frequency = [];
 var realItemSetFrequency = [];
 var isSecond = 0;
 var firstIndex;
+var graph1Source = [];
+var graph1Reference = {};
+var queryTotal = [];
 $(document).ready(function(){
         $.getJSON('/start',
             function (data) {
@@ -54,7 +57,22 @@ $(function () {
     $("#container1").ejChart({
         pointRegionClick: function (args) {
          debugger;
-         console.log(args)
+         var requestedValue = graph1Source["Count"][args.data.region.Region.PointIndex].ItemSizeName.split("<br>");
+         var RequestedKey =  graph1Source["ItemSizeName"].split("<br>");
+         for( var j = 0; j < requestedValue.length; j++){
+             if(graph1Reference.hasOwnProperty(RequestedKey[j])){
+                graph1Reference[RequestedKey[j]].push(requestedValue[j]);
+             }
+             else{
+                 graph1Reference[RequestedKey[j]] = Array(1);
+                 graph1Reference[RequestedKey[j]][0] = (requestedValue[j]);
+             }
+         }
+          $.post("/kmeans",  jsonObj,  function (data, status) {
+              debugger;
+
+
+          })
         },
         zooming: {enable: true},
         title: {
@@ -127,15 +145,17 @@ $(function () {
                 var primaryKeySecond = primaryKey +1;
                 var freqSize = [];
                 for(var itemName in data[freqNum] ){
-                    dataItem.push({"text" :itemName.replace(/[{(')}]/g, ''),"primaryKey" : primaryKeySecond.toString(), "parentPrimaryKey":primaryKey.toString()});
+                    var out = itemName.replace(/[{()}]/g, '').split(/'/).filter(x => x&&x!==", ").join("|");
+                    dataItem.push({"text" :out,"primaryKey" : primaryKeySecond.toString(), "parentPrimaryKey":primaryKey.toString()});
                     var freqSizeItem = [];
                     var subFreqSizeItem = [];
                     for (var realItemName in  data[freqNum][itemName]){
                         var primaryKeyThird  = primaryKeySecond + 1;
-                        dataItem.push({"text": realItemName.replace(/[{(')}]/g, ''), "parentPrimaryKey": primaryKeySecond.toString()})
-                        subFreqSizeItem.push({"ItemSizeName": realItemName.replace(/,/g,"<br>").replace(/[{(')}]/g, ''), "Count":  data[freqNum][itemName][realItemName]})
+                        var output = realItemName.replace(/[{()}]/g, '').split(/'/).filter(x => x&&x!==", ").join("|");
+                        dataItem.push({"text": output, "parentPrimaryKey": primaryKeySecond.toString()})
+                        subFreqSizeItem.push({"ItemSizeName": output.replace("|","<br>").replace(/[{(')}]/g, ''), "Count":  data[freqNum][itemName][realItemName]})
                     }
-                    freqSize.push({"ItemSizeName" : itemName.replace(/,/g,"<br>").replace(/[{(')}]/g, ''), "Count" : subFreqSizeItem});
+                    freqSize.push({"ItemSizeName" : out.replace("|","<br>").replace(/[{(')}]/g, ''), "Count" : subFreqSizeItem});
                     primaryKeySecond ++;
                 }
                 itemSet_Frequency.push(freqSize);

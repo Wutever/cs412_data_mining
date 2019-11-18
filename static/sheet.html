@@ -93,7 +93,7 @@ $(document).ready(function(){
                 for( var entry in itemSet_Frequency[args.index]){
                       tmpdata.push({"ItemSizeName" : itemSet_Frequency[args.index][entry]["ItemSizeName"], "Count" :  itemSet_Frequency[args.index][entry]["Count"].length});
                 }
-
+                graph1Source = tmpdata;
                 $("#container1").ejChart({
                  series: [{
                      dataSource: tmpdata,
@@ -104,6 +104,7 @@ $(document).ready(function(){
             }
             else{
                  isSecond = 0;
+                 graph1Source = itemSet_Frequency[firstIndex][args.index];
                  $("#container1").ejChart({
                  series: [{
                      dataSource: itemSet_Frequency[firstIndex][args.index]["Count"],
