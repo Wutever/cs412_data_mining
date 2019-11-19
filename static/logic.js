@@ -61,18 +61,13 @@ $(function () {
          var RequestedKey =  graph1Source["ItemSizeName"].split("<br>");
          for( var j = 0; j < requestedValue.length; j++){
              if(graph1Reference.hasOwnProperty(RequestedKey[j])){
-                graph1Reference[RequestedKey[j]].push(requestedValue[j]);
+                if(!graph1Reference[RequestedKey[j]].includes(requestedValue[j]))graph1Reference[RequestedKey[j]].push(requestedValue[j]);
              }
              else{
                  graph1Reference[RequestedKey[j]] = Array(1);
                  graph1Reference[RequestedKey[j]][0] = (requestedValue[j]);
              }
          }
-          $.post("/kmeans",  jsonObj,  function (data, status) {
-              debugger;
-
-
-          })
         },
         zooming: {enable: true},
         title: {
@@ -153,9 +148,9 @@ $(function () {
                         var primaryKeyThird  = primaryKeySecond + 1;
                         var output = realItemName.replace(/[{()}]/g, '').split(/'/).filter(x => x&&x!==", ").join("|");
                         dataItem.push({"text": output, "parentPrimaryKey": primaryKeySecond.toString()})
-                        subFreqSizeItem.push({"ItemSizeName": output.replace("|","<br>").replace(/[{(')}]/g, ''), "Count":  data[freqNum][itemName][realItemName]})
+                        subFreqSizeItem.push({"ItemSizeName": output.split("|").join("<br>").replace(/[{(')}]/g, ''), "Count":  data[freqNum][itemName][realItemName]})
                     }
-                    freqSize.push({"ItemSizeName" : out.replace("|","<br>").replace(/[{(')}]/g, ''), "Count" : subFreqSizeItem});
+                    freqSize.push({"ItemSizeName" : out.split("|").join("<br>").replace(/[{(')}]/g, ''), "Count" : subFreqSizeItem});
                     primaryKeySecond ++;
                 }
                 itemSet_Frequency.push(freqSize);
@@ -168,6 +163,19 @@ $(function () {
 
 
             });
+        return false;
+    });
+});
+
+
+$(function () {
+    $('#test').bind('click', function () {
+debugger;
+      $.post("/kmeans",  jsonObj,  function (data, status) {
+          debugger;
+
+
+      });
         return false;
     });
 });
