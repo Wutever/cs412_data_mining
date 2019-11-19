@@ -171,9 +171,8 @@ $(function () {
 $(function () {
     $('#test').bind('click', function () {
 debugger;
-      $.post("/kmeans",  jsonObj,  function (data, status) {
+      $.post("/dbscan",  graph1Reference,  function (data, status) {
           debugger;
-
 
       });
         return false;

@@ -5,6 +5,8 @@ from flask import Flask, escape, request
 
 from apriori import processData
 
+from dbscan import dbscan1
+
 app = Flask(__name__)
 
 csv_file = os.path.join(os.getcwd(), "parsed1.json")
@@ -24,11 +26,9 @@ def apriori():
 
     return processData(float(support), int(itemSize), column.split(","))
 
-@app.route('/kmeans', methods=['POST'])
-def kmeans():
-    data = []
-    for value in request.values.values():
-        data.append(value)
+@app.route('/dbscan', methods=['POST'])
+def dbscan():
+    dbscan1(request.values.dicts[1])
     return
 
 
