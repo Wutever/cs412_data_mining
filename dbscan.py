@@ -61,8 +61,17 @@ def dbscan(df, categorical_dict, numeric_columns, eps, minpts):
                         neighbors = neighbors + new_neighbors
                 j += 1        
     
-    labels = list(labels)
-    count = list(value_counts.values)
+    count = value_counts.values
+    
+    labels_temp = dict(zip(data, labels))
+    labels = {}
+    for key, value in labels_temp.items():
+        labels[str(key)] = value
+        
+    count_temp = dict(zip(data, count))
+    count = {}
+    for key, value in count_temp.items():
+        count[str(key)] = value
     
     return labels, count
 
