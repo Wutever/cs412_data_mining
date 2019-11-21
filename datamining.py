@@ -28,8 +28,12 @@ def apriori():
 
 @app.route('/dbscan', methods=['POST'])
 def dbscan():
-    dbscan1(request.values.dicts[1])
-    return
+
+    tmp = {}
+    for key in request.values.dicts[1] :
+        tmp[key] = request.values.dicts[1][key].split("|")
+    return dbscan1(tmp)
+
 
 
 @app.route('/start')

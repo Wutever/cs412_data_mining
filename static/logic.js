@@ -5,6 +5,88 @@ var firstIndex;
 var graph1Source = [];
 var graph1Reference = {};
 var queryTotal = [];
+var map;
+
+var locations = [
+    {lat: -31.563910, lng: 147.154312},
+    {lat: -33.718234, lng: 150.363181},
+    {lat: -33.727111, lng: 150.371124},
+    {lat: -33.848588, lng: 151.209834},
+    {lat: -33.851702, lng: 151.216968},
+    {lat: -34.671264, lng: 150.863657},
+    {lat: -35.304724, lng: 148.662905},
+    {lat: -36.817685, lng: 175.699196}
+  ];
+var markers;
+var markerCluster;
+function initMap() {
+map = new google.maps.Map(document.getElementById('map'), {
+  center: {lat: -34.397, lng: 150.644},
+  zoom: 8
+});
+       // Create an array of alphabetical characters used to label the markers.
+        var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        // Add some markers to the map.
+        // Note: The code uses the JavaScript Array.prototype.map() method to
+        // create an array of markers based on a given "locations" array.
+        // The map() method here has nothing to do with the Google Maps API.
+         markers = locations.map(function(location, i) {
+          return new google.maps.Marker({
+            position: location,
+            label: labels[i % labels.length]
+          });
+        });
+
+        // Add a marker clusterer to manage the markers.
+         markerCluster = new MarkerClusterer(map, markers,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+}
+$(function () {
+    $('#test').bind('click', function () {
+debugger;
+        var output = {};
+        for (var ab in graph1Reference){
+            var array = graph1Reference[ab];
+            output[ab] = array.join("|")
+        }
+      $.post("/dbscan",  output,  function (data, status) {
+          debugger;
+            //clearMarkers();
+           markerCluster.clearMarkers();
+            var info = JSON.parse(data);
+           var label = info["label"];
+          var count = info["count"];
+          var locations = [];
+          var labels = [];
+          for (var value in label){
+              labels.push(label[value].toString());
+              var loc = {};
+              var locarray = value.replace(/[{()}]/g, '').split(',');
+              loc["lng"] =  parseFloat(locarray[0]);
+              loc["lat"] =  parseFloat(locarray[1]);
+              locations.push(loc);
+          }
+          var markers = locations.map(function(location, i) {
+          return new google.maps.Marker({
+            position: location,
+            label: labels[i]
+          });
+        });
+         markerCluster = new MarkerClusterer(map, markers,
+             {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+
+      });
+        return false;
+    });
+});
+function clearMarkers() {
+  for (var i = 0; i < markers.length; i++ ) {
+    markers[i].setMap(null);
+  }
+  markers.length = 0;
+}
 $(document).ready(function(){
         $.getJSON('/start',
             function (data) {
@@ -168,13 +250,3 @@ $(function () {
 });
 
 
-$(function () {
-    $('#test').bind('click', function () {
-debugger;
-      $.post("/dbscan",  graph1Reference,  function (data, status) {
-          debugger;
-
-      });
-        return false;
-    });
-});

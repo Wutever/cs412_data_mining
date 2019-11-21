@@ -22,8 +22,7 @@ def dbscan(df, categorical_dict, numeric_columns, eps, minpts):
     
     if categorical_dict:
         for key, arr in categorical_dict.items():
-            for value in arr:
-                df = df[df[key] == value]
+            df = df[df[key].isin(arr)]
         
     df['new'] = list(zip(df[numeric_columns[0]], df[numeric_columns[1]]))
     value_counts = df['new'].value_counts()
@@ -61,8 +60,15 @@ def dbscan(df, categorical_dict, numeric_columns, eps, minpts):
                         neighbors = neighbors + new_neighbors
                 j += 1        
     
-    labels = list(labels)
-    count = list(value_counts.values)
+    count = value_counts.values
+    labels_temp = dict(zip(data, labels))
+    labels = {}
+    for key, value in labels_temp.items():
+        labels[str(key)] = value
+    count_temp = dict(zip(data, count))
+    count = {}
+    for key, value in count_temp.items():
+        count[str(key)] = value
     
     return labels, count
 
@@ -70,18 +76,18 @@ df = pd.read_csv('h1b_kaggle.csv', na_values = 'NaN')
 df = df.drop(columns = ['Unnamed: 0'])
 df = df.dropna()
 
-
+#labels, count = dbscan(df, {'EMPLOYER_NAME': ['INFOSYS LIMITED', 'TATA CONSULTANCY SERVICES LIMITED'], 'FULL_TIME_POSITION': ['Y']}, ['lon', 'lat'], 2, 10)
 
 def convert(o):
     if isinstance(o, np.int64): 
     	return int(o)  
     raise TypeError
 
+
 def dbscan1(dict):
+    #labels, count = dbscan(df,{'EMPLOYER_NAME': ['INFOSYS LIMITED', 'TATA CONSULTANCY SERVICES LIMITED'], 'FULL_TIME_POSITION': ['Y']}, ['lon', 'lat'], 2, 10)
     labels, count = dbscan(df, dict, ['lon', 'lat'], 2, 10)
-    labels = json.dumps(labels, default=convert)
-    print(labels)
-
-    count = json.dumps(count, default=convert)
-    print(count)
-
+    value = {}
+    value["label"] = labels
+    value["count"] = count
+    return json.dumps(value, default=convert)

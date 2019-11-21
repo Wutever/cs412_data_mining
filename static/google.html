@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <!-- Essential Studio for JavaScript  theme reference -->
+  <head>
     <link rel="stylesheet" href="http://cdn.syncfusion.com/17.3.0.9/js/web/flat-azure/ej.web.all.min.css"/>
     <!--  jquery script  -->
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -14,13 +13,18 @@
     <!--Add custom scripts here -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcEu9p3LmmKdBZEq7emIksDjz2NVnw_AQ&callback=initMap"
     async defer></script>
-     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
     <style>
-        #map {
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
         height: 30%;
           width : 30%
       }
-        * {
+      /* Optional: Makes the sample page fill the window. */
+   * {
             box-sizing: border-box;
         }
         .header {
@@ -56,8 +60,9 @@
             padding: 30px;
         }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+
 <div class="header">
     <h1>Data Mining SpreadSheet</h1>
 </div>
@@ -78,7 +83,10 @@
 <input id = "test" type="submit" value="db scan"/>
 <div class=main id="container1" >
 </div>
-<div class=main id="map"></div>
+<div  class=main  id="map"></div>
+<div class=main>
+
+</div>
 <div class='menu' id="Spreadsheet"></div>
 <div class=side>
     <p>choose column</p>
@@ -86,9 +94,15 @@
 
     </div>
 </div>
-
-<script>
-$(document).ready(function(){
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 8
+        });
+      }
+      $(document).ready(function(){
     $("#defaultListView").ejListView({
         mouseDown: function (args) { //handle the event
             debugger;
@@ -123,7 +137,7 @@ $(document).ready(function(){
         }
     });
 });
-</script>
+    </script>
 <script src="logic.js"></script>
-</body>
+  </body>
 </html>
