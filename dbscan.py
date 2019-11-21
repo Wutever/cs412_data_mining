@@ -22,8 +22,7 @@ def dbscan(df, categorical_dict, numeric_columns, eps, minpts):
     
     if categorical_dict:
         for key, arr in categorical_dict.items():
-            for value in arr:
-                df = df[df[key] == value]
+            df = df[df[key].isin(arr)]
         
     df['new'] = list(zip(df[numeric_columns[0]], df[numeric_columns[1]]))
     value_counts = df['new'].value_counts()
@@ -62,12 +61,10 @@ def dbscan(df, categorical_dict, numeric_columns, eps, minpts):
                 j += 1        
     
     count = value_counts.values
-    
     labels_temp = dict(zip(data, labels))
     labels = {}
     for key, value in labels_temp.items():
         labels[str(key)] = value
-        
     count_temp = dict(zip(data, count))
     count = {}
     for key, value in count_temp.items():
@@ -79,7 +76,7 @@ df = pd.read_csv('h1b_kaggle.csv', na_values = 'NaN')
 df = df.drop(columns = ['Unnamed: 0'])
 df = df.dropna()
 
-labels, count = dbscan(df, {'EMPLOYER_NAME': ['GOOGLE INC.']}, ['lon', 'lat'], 2, 10)
+labels, count = dbscan(df, {'EMPLOYER_NAME': ['INFOSYS LIMITED', 'TATA CONSULTANCY SERVICES LIMITED'], 'FULL_TIME_POSITION': ['Y']}, ['lon', 'lat'], 2, 10)
 
 def convert(o):
     if isinstance(o, np.int64): 
