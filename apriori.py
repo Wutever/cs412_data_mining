@@ -12,7 +12,7 @@ def apriori(data, threshold, length, columns = None):
     #if length > len(data.columns)+1:
     #    raise ValueError('Desired length of itemsets must be smaller or equal to number of attributes.')
     if length > len(data.columns):
-    	length = len(data.columns)
+        length = len(data.columns)
 
     data, itemsets, attributes, candidates = apriori_1(data, threshold)
     json_dict[1] = itemsets
@@ -25,10 +25,10 @@ def apriori(data, threshold, length, columns = None):
         #print(' ')
 
         for col_name, attr_dict in itemsets_with_support.items():
-        	temp_attr = {}
-        	for key, count in attr_dict.items():
-        		temp_attr[str(key)] = count
-        		itemsets_with_support[col_name] = temp_attr
+            temp_attr = {}
+            for key, count in attr_dict.items():
+                temp_attr[str(key)] = count
+                itemsets_with_support[col_name] = temp_attr
 
         temp_dict = {}
         for key, value in itemsets_with_support.items():
@@ -145,11 +145,11 @@ n_rows = len(data.index)
 
 json_dict = {}
 
-apriori(data, 0.00001, 6)
+apriori(data, 0.00001, 6, columns = ['Reviewer_Nationality', 'Hotel_Country', 'Has_Pet', 'Trip_Type', 'Traveler_Type', 'Room_Type', 'Stay_Period', 'Mobile_Submission'])
 
 def convert(o):
     if isinstance(o, np.int64): 
-    	return int(o)  
+        return int(o)  
     raise TypeError
 
 json_str = json.dumps(json_dict, default=convert)
