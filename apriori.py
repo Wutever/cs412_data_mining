@@ -87,8 +87,6 @@ def apriori_n(data, length_nminus1_itemsets, attribute_list, length_n_candidates
         
     itemsets = {}
     for item in list(itertools.combinations(attribute_list.keys(), n)):
-        if 'CASE_STATUS' in item:
-            continue
         frequent = []
         grouped = data.groupby(list(item)).count().iloc[:,0] / n_rows > threshold
         for index in grouped[grouped[grouped.index] == True].index:
