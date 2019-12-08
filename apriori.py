@@ -140,14 +140,12 @@ def apriori_n(data, length_nminus1_itemsets, attribute_list, length_n_candidates
     
     return data, itemsets, attributes, candidates, itemsets_with_support
 
-data = pd.read_csv('h1b_kaggle.csv', na_values = 'NaN')
-data = data.drop(columns = ['Unnamed: 0', 'PREVAILING_WAGE', 'YEAR', 'lon', 'lat'])
-data = data.dropna()
+data = pd.read_csv('hotel_cleaned.csv')
 n_rows = len(data.index)
 
 json_dict = {}
 
-apriori(data, 0.001, 6)
+apriori(data, 0.00001, 6)
 
 def convert(o):
     if isinstance(o, np.int64): 
