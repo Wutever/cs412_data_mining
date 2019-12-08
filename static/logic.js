@@ -72,6 +72,9 @@ debugger;
             position: location,
             label: labels[i]
           });
+
+
+
         });
          markerCluster = new MarkerClusterer(map, markers,
              {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
@@ -116,6 +119,7 @@ $("#Spreadsheet").ejSpreadsheet({
         if(columnList!=="")columnList=columnList.concat(",");
         columnList=columnList.concat(value);
         $('input[name=Columns]').val(columnList);
+        $('input[name=col]').val(columnList);
         console.log(value)
     },
     showRibbon: false
@@ -135,6 +139,7 @@ $(function () {
 function cellClick(args) {
     jQuery.addEventLog("Spreadsheet <span class='eventTitle'>cellClick</span> event called");
 }
+
 $(function () {
     $("#container1").ejChart({
         pointRegionClick: function (args) {
@@ -150,6 +155,7 @@ $(function () {
                  graph1Reference[RequestedKey[j]][0] = (requestedValue[j]);
              }
          }
+        $("#area").val(JSON.stringify(graph1Reference));
         },
         zooming: {enable: true},
         title: {
@@ -180,19 +186,62 @@ $(function () {
                 },
             }
     });
-    $("#container2").ejChart({
+        $("#container3").ejChart({
         title: {
 	           //Add chart title
-               text: 'Frequent Support Item Set'
+               text: 'Asscioation Rule'
 	        },
+        zooming: {enable: true},
          series: [{
+             type: 'pie',
            marker: {
              dataLabel: {
                 //Enable data label in the chart
                 visible: true
-           } }
+             }
+           },
+          tooltip: {
+               visible: true
+           },
+            selectionSettings: {
+             // enable the selection settings
+             mode: 'point',
+             enable: true
+          }
          }],
         primaryXAxis: {
+            labelIntersectAction : 'trim',
+                font : {
+                        fontFamily : 'Segoe UI',
+                        size : '10px',
+                },
+            }
+    });
+    $("#container2").ejChart({
+        title: {
+	           //Add chart title
+               text: 'Numerical Db scan scatter plot'
+	        },
+        zooming: {enable: true},
+         series: [{
+             type: 'scatter',
+           marker: {
+             dataLabel: {
+                //Enable data label in the chart
+                visible: true
+             }
+           },
+          tooltip: {
+               visible: true
+           },
+            selectionSettings: {
+             // enable the selection settings
+             mode: 'point',
+             enable: true
+          }
+         }],
+        primaryXAxis: {
+            labelIntersectAction : 'trim',
                 font : {
                         fontFamily : 'Segoe UI',
                         size : '10px',
@@ -248,5 +297,64 @@ $(function () {
         return false;
     });
 });
+
+
+$(function () {
+    $( "#acRule" ).submit(function () {
+
+
+        debugger;
+        var output = {};
+        for (var ab in graph1Reference){
+            var array = graph1Reference[ab];
+            output[ab] = array.join("|")
+        }
+        output["second"] = $('input[name=col]').val();
+        $.post("/piechart", output,  function (data, status) {
+            debugger;
+            var he = {};
+            he["test"] = 3;
+            he["test2"] = 3;
+            test = [];
+            for (var key in he){
+                var data3 = {};
+                data3["x"] = key;
+                data3["y"] = he[key];
+                test.push(data3)
+            }
+            $("#container3").ejChart({
+            series:
+			[
+				{
+                    points:test ,
+                    marker:
+					{
+                        dataLabel:
+						{
+							visible:true,
+                            shape: 'none',
+							connectorLine: { type: 'bezier',color: 'black' },
+                            font: {size:'14px'},
+							enableContrastColor:true
+						}
+                    },
+                    border :{width:2, color:'white'},
+                    name: 'Expenses',
+					type: 'pie',
+					enableAnimation : true,
+					labelPosition:'outsideExtended',
+					enableSmartLabels:true
+                }
+            ],
+            load: "loadTheme",
+			seriesRendering:"seriesRender",
+            isResponsive: true,
+            });
+
+            });
+        return false;
+    });
+});
+
 
 

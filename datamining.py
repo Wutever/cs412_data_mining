@@ -32,8 +32,18 @@ def dbscan():
     tmp = {}
     for key in request.values.dicts[1] :
         tmp[key] = request.values.dicts[1][key].split("|")
-    return dbscan1(tmp)
+    return dbscan1(tmp)@app.route('/dbscan', methods=['POST'])
 
+@app.route('/piechart', methods=['POST'])
+def piechart():
+
+    tmp = {}
+    for key in request.values.dicts[1] :
+        if key == 'second':
+            second = request.values.dicts[1][key]
+        tmp[key] = request.values.dicts[1][key].split("|")
+
+    return "test"
 
 
 @app.route('/start')

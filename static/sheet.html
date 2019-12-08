@@ -48,6 +48,13 @@
             padding: 15px;
             grid-template-rows: 50% 50%;
         }
+        .submain {
+            width: 25%;
+            min-height: 42vh;
+            float: left;
+            padding: 15px;
+            grid-template-rows: 50% 50%;
+        }
 
         .side {
             width: 25%;
@@ -61,7 +68,6 @@
 <div class="header">
     <h1>Data Mining SpreadSheet</h1>
 </div>
-
 <div class=scheme>
     <form id="target" >
           Support in Ratio:
@@ -75,9 +81,16 @@
 </div>
 <div class=scheme>
 </div>
+        <textarea rows="5" cols="50" name="comment" id = "area"></textarea>
+    <form id="acRule" >
+          Asociation rule with
+          <input type="text" name="col" value="">
+          <input type="submit" value="Execute">
+    </form>
 <input id = "test" type="submit" value="db scan"/>
-<div class=main id="container1" >
-</div>
+<div class=main id="container1" ></div>
+<div class=submain id="container3" ></div>
+<div class=submain id="container2" ></div>
 <div class=main id="map"></div>
 <div class='menu' id="Spreadsheet"></div>
 <div class=side>
