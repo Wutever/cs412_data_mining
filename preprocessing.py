@@ -23,7 +23,7 @@ def has_pet_check(tags):
 
 def has_pet_fill(tags):
     if len(tags) != 0:
-        return tags[0]
+        return tags[0].strip()
 
 def has_pet_trim(tags):
     if len(tags) != 0:
@@ -41,7 +41,7 @@ def trip_type_check(tags):
 
 def trip_type_fill(tags):
     if len(tags) != 0:
-        return tags[0]
+        return tags[0].strip()
 
 def trip_type_trim(tags):
     if len(tags) != 0:
@@ -59,7 +59,7 @@ def traveler_type_check(tags):
     
 def traveler_type_fill(tags):
     if len(tags) != 0:
-        return tags[0]
+        return tags[0].strip()
 
 def traveler_type_trim(tags):
     if len(tags) != 0:
@@ -77,7 +77,7 @@ def room_type_check(tags):
 
 def room_type_fill(tags):
     if len(tags) != 0:
-        return tags[0]
+        return tags[0].strip()
 
 def room_type_trim(tags):
     if len(tags) != 0:
@@ -95,7 +95,7 @@ def stay_period_check(tags):
 
 def stay_period_fill(tags):
     if len(tags) != 0:
-        return tags[0]
+        return tags[0].strip()
 
 def stay_period_trim(tags):
     if len(tags) != 0:
@@ -113,7 +113,7 @@ def mobile_submission_check(tags):
 
 def mobile_submission_fill(tags):
     if len(tags) != 0:
-        return tags[0]
+        return tags[0].strip()
 
 def mobile_submission_trim(tags):
     if len(tags) != 0:
