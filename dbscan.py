@@ -72,11 +72,9 @@ def dbscan(df, categorical_dict, numeric_columns, eps, minpts):
     
     return labels, count
 
-df = pd.read_csv('h1b_kaggle.csv', na_values = 'NaN')
-df = df.drop(columns = ['Unnamed: 0'])
-df = df.dropna()
+df = pd.read_csv('hotel_cleaned.csv', na_values = 'nan')
+df = df.dropna(subset = ['lng', 'lat'])
 
-#labels, count = dbscan(df, {'EMPLOYER_NAME': ['INFOSYS LIMITED', 'TATA CONSULTANCY SERVICES LIMITED'], 'FULL_TIME_POSITION': ['Y']}, ['lon', 'lat'], 2, 10)
 
 def convert(o):
     if isinstance(o, np.int64): 

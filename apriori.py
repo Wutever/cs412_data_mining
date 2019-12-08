@@ -12,8 +12,8 @@ def apriori(data, threshold, length, columns = None):
     #if length > len(data.columns)+1:
     #    raise ValueError('Desired length of itemsets must be smaller or equal to number of attributes.')
     if length > len(data.columns):
-    	length = len(data.columns)
-        
+        length = len(data.columns)
+
     data, itemsets, attributes, candidates = apriori_1(data, threshold)
     json_dict[1] = itemsets
     for n in range(2, length):
@@ -25,10 +25,11 @@ def apriori(data, threshold, length, columns = None):
         #print(' ')
 
         for col_name, attr_dict in itemsets_with_support.items():
-        	temp_attr = {}
-        	for key, count in attr_dict.items():
-        		temp_attr[str(key)] = count
-        		itemsets_with_support[col_name] = temp_attr
+            temp_attr = {}
+            for key, count in attr_dict.items():
+                temp_attr[str(key)] = count
+                itemsets_with_support[col_name] = temp_attr
+
 
         temp_dict = {}
         for key, value in itemsets_with_support.items():
@@ -87,8 +88,6 @@ def apriori_n(data, length_nminus1_itemsets, attribute_list, length_n_candidates
         
     itemsets = {}
     for item in list(itertools.combinations(attribute_list.keys(), n)):
-        if 'CASE_STATUS' in item:
-            continue
         frequent = []
         grouped = data.groupby(list(item)).count().iloc[:,0] / n_rows > threshold
         for index in grouped[grouped[grouped.index] == True].index:
@@ -142,14 +141,10 @@ def apriori_n(data, length_nminus1_itemsets, attribute_list, length_n_candidates
     
     return data, itemsets, attributes, candidates, itemsets_with_support
 
-data = pd.read_csv('h1b_kaggle.csv', na_values = 'NaN')
-data = data.drop(columns = ['Unnamed: 0', 'PREVAILING_WAGE', 'YEAR', 'lon', 'lat'])
-data = data.dropna()
+data = pd.read_csv('hotel_cleaned.csv')
 n_rows = len(data.index)
 
 json_dict = {}
-
-
 
 
 def convert(o):
@@ -157,10 +152,7 @@ def convert(o):
     	return int(o)  
     raise TypeError
 
-
-
 #print(json_str)
-
 
 def processData( threshold, length, column):
     if column[0] == '':
