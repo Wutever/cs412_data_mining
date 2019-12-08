@@ -75,7 +75,6 @@ def dbscan(df, categorical_dict, numeric_columns, eps, minpts):
 df = pd.read_csv('hotel_cleaned.csv', na_values = 'nan')
 df = df.dropna(subset = ['lng', 'lat'])
 
-labels, count = dbscan(df, {}, ['lng', 'lat'], 2, 10)
 
 def convert(o):
     if isinstance(o, np.int64): 
@@ -83,8 +82,10 @@ def convert(o):
     raise TypeError
 
 
-labels = json.dumps(labels, default=convert)
-print(labels)
-
-count = json.dumps(count, default=convert)
-print(count)
+def dbscan1(dict):
+    #labels, count = dbscan(df,{'EMPLOYER_NAME': ['INFOSYS LIMITED', 'TATA CONSULTANCY SERVICES LIMITED'], 'FULL_TIME_POSITION': ['Y']}, ['lon', 'lat'], 2, 10)
+    labels, count = dbscan(df, dict, ['lon', 'lat'], 2, 10)
+    value = {}
+    value["label"] = labels
+    value["count"] = count
+    return json.dumps(value, default=convert)

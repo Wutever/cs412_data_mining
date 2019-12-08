@@ -30,6 +30,7 @@ def apriori(data, threshold, length, columns = None):
                 temp_attr[str(key)] = count
                 itemsets_with_support[col_name] = temp_attr
 
+
         temp_dict = {}
         for key, value in itemsets_with_support.items():
             temp_dict[str(key)] = value
@@ -145,15 +146,22 @@ n_rows = len(data.index)
 
 json_dict = {}
 
-apriori(data, 0.00001, 6, columns = ['Reviewer_Nationality', 'Hotel_Country', 'Has_Pet', 'Trip_Type', 'Traveler_Type', 'Room_Type', 'Stay_Period', 'Mobile_Submission'])
 
 def convert(o):
     if isinstance(o, np.int64): 
-        return int(o)  
+    	return int(o)  
     raise TypeError
 
-json_str = json.dumps(json_dict, default=convert)
-print(json_str)
+#print(json_str)
+
+def processData( threshold, length, column):
+    if column[0] == '':
+        apriori(data, threshold, length)
+    else:
+        apriori(data, threshold, length, columns=column)
+    json_str = json.dumps(json_dict, default=convert)
+    return json_str
+
 
 ####################################################### DONE ########################################################
 
