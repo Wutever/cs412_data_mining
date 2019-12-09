@@ -42,6 +42,18 @@ map = new google.maps.Map(document.getElementById('map'), {
          markerCluster = new MarkerClusterer(map, markers,
             {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 }
+
+$(function () {
+    $('#curindex').bind('click', function () {
+        var output = {}
+        output["index"] = $('input[name=currentindex]').val();
+              $.post("/updateIndex",  output,  function (data, status) {
+
+
+              });
+    });
+});
+
 $(function () {
     $('#test').bind('click', function () {
 debugger;
@@ -174,6 +186,18 @@ $(document).ready(function(){
                 var settings = { dataSource: array, showHeader: "true", startCell: "A1" };
                 excelObj.updateRange(1, settings);
                 excelObj.XLResize.fitWidth([...Array(15).keys()].map(x => x++))
+                excelObj.addNewSheet();
+            });
+                $.getJSON('/starts',
+            function (data) {
+                //do nothing
+                var excelObj = $("#Spreadsheet").data("ejSpreadsheet");
+                var array =Object.values(data);
+                var settings = { dataSource: array, showHeader: "true", startCell: "A1" };
+                debugger
+                excelObj.addNewSheet();
+                excelObj.updateRange(2, settings);
+                 excelObj.XLResize.fitWidth([...Array(15).keys()].map(x => x++))
             });
 
         return false;
@@ -265,7 +289,7 @@ $(function () {
         $("#container3").ejChart({
         title: {
 	           //Add chart title
-               text: 'Asscioation Rule'
+               text: 'Association Rule'
 	        },
         zooming: {enable: true},
          series: [{
@@ -318,6 +342,7 @@ $(function () {
             var array = graph1Reference[ab];
             output[ab] = array.join("|")
         }
+        output["info"] =  $('input[name=winfo]').val();
          $.post("/usercase2", output,  function (data, status) {
              markerCluster.clearMarkers();
              data = data.substring(1);

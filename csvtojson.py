@@ -4,8 +4,8 @@ import os
 
 
 def get_csv(begin, end) :
-    csvFilePath = os.path.join(os.getcwd(), "hotel_cleaned.csv")
-    jsonFilePath = os.path.join(os.getcwd(), 'parsed1.json')
+    csvFilePath = os.path.join(os.getcwd(), "h1b_kaggle.csv")
+    jsonFilePath = os.path.join(os.getcwd(), 'parsed2.json')
 
     data = {}
     i = begin

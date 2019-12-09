@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import json
 
-data = pd.read_csv('hotel_cleaned.csv')
 
 
 def user_case1(data, dic, col_name):
@@ -26,7 +25,8 @@ def convert(o):
     raise TypeError
 
 
-def pieChart(dict, col):
+def pieChart(dict, col, index):
+    data = pd.read_csv(index)
     count, proportion = user_case1(data, dict,col)
     return json.dumps(count, default=convert)
 

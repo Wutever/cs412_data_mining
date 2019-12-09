@@ -68,6 +68,9 @@
 <div class="header">
     <h1>Data Mining SpreadSheet</h1>
             <input id = "clear" type="submit" value="clear input"/>
+            Wanted Information:
+          <input id="winfo" type="text" name="winfo" value="Hotel_Name,Hotel_Address,lat,lng,Average_Score">
+        <input id = "recommandation" type="submit" value="Run Recommendation">
 </div>
 <div class=scheme>
     <form id="target" >
@@ -88,7 +91,6 @@
           Asociation rule with
           <input type="text" name="col" value="">
           <input type="submit" value="Execute">
-        <input id = "recommandation" type="submit" value="Run Recommendation">
     </form>
 
 
@@ -104,8 +106,14 @@
 <div class=submain id="container3" ></div>
 <div class=submain id="container2" ></div>
 <div class=main id="map"></div>
+
+
 <div class='menu' id="Spreadsheet"></div>
+
 <div class=side>
+                Sheet Index:
+        <input type="text" name="currentindex" value = "1">
+             <input id = "curindex" type="submit" value="update"/>
     <p>choose column</p>
     <div id="defaultListView" data-ej-allowScrolling=true>
 

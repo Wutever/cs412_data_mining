@@ -141,10 +141,7 @@ def apriori_n(data, length_nminus1_itemsets, attribute_list, length_n_candidates
     
     return data, itemsets, attributes, candidates, itemsets_with_support
 
-data = pd.read_csv('hotel_cleaned.csv')
-n_rows = len(data.index)
 
-json_dict = {}
 
 
 def convert(o):
@@ -154,7 +151,12 @@ def convert(o):
 
 #print(json_str)
 
-def processData( threshold, length, column):
+def processData( threshold, length, column, index):
+    data = pd.read_csv(index)
+    global n_rows
+    n_rows = len(data.index)
+    global json_dict
+    json_dict = {}
     if column[0] == '':
         apriori(data, threshold, length)
     else:

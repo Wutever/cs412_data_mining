@@ -72,17 +72,15 @@ def dbscan(df, categorical_dict, numeric_columns, eps, minpts):
     
     return labels, count
 
-df = pd.read_csv('hotel_cleaned.csv', na_values = 'nan')
-df = df.dropna(subset = ['lng', 'lat'])
-
-
 def convert(o):
     if isinstance(o, np.int64): 
     	return int(o)  
     raise TypeError
 
 
-def dbscan1(dict, factor, eps, minpts):
+def dbscan1(dict, factor, eps, minpts, index):
+    df = pd.read_csv(index, na_values = 'nan')
+    df = df.dropna(subset=['lng', 'lat'])
     #labels, count = dbscan(df,{'EMPLOYER_NAME': ['INFOSYS LIMITED', 'TATA CONSULTANCY SERVICES LIMITED'], 'FULL_TIME_POSITION': ['Y']}, ['lon', 'lat'], 2, 10)
     labels, count = dbscan(df, dict, factor.split(","), eps, minpts)
     value = {}

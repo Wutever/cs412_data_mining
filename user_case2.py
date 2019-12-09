@@ -11,7 +11,8 @@ def convert(o):
 
 
 
-def user_case2(params, cols = ['Hotel_Name', 'Hotel_Address', 'lat', 'lng', 'Average_Score']):
+def user_case2(params, cols, index):
+    data = pd.read_csv(index)
     data = pd.read_csv('hotel_cleaned.csv')
     for key, arr in params.items():
         data = data[data[key].isin(arr)]
