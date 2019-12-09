@@ -69,8 +69,18 @@ def dbscan(df, categorical_dict, numeric_columns, eps, minpts):
     count = {}
     for key, value in count_temp.items():
         count[str(key)] = value
+        
+    key_values = df[numeric_columns + ['lng', 'lat']].drop_duplicates()
     
-    return labels, count
+    correspondence_temp = {}
+    for key in labels_temp.keys():
+        correspondence_temp[key] = (key_values.loc[(key_values[numeric_columns[0]] == key[0]) & (key_values[numeric_columns[1]] == key[1]), 'lng'].values[0], key_values.loc[(key_values[numeric_columns[0]] == key[0]) & (key_values[numeric_columns[1]] == key[1]), 'lat'].values[0])
+    
+    correspondence = {}
+    for key, value in correspondence_temp.items():
+        correspondence[str(key)] = str(value)
+    
+    return labels, count, correspondence
 
 df = pd.read_csv('hotel_cleaned.csv', na_values = 'nan')
 df = df.dropna(subset = ['lng', 'lat'])
@@ -84,8 +94,9 @@ def convert(o):
 
 def dbscan1(dict):
     #labels, count = dbscan(df,{'EMPLOYER_NAME': ['INFOSYS LIMITED', 'TATA CONSULTANCY SERVICES LIMITED'], 'FULL_TIME_POSITION': ['Y']}, ['lon', 'lat'], 2, 10)
-    labels, count = dbscan(df, dict, ['lon', 'lat'], 2, 10)
+    labels, count, correspondence = dbscan(df, {}, ['Average_Score', 'Total_Number_of_Reviews'], 20, 5)
     value = {}
     value["label"] = labels
     value["count"] = count
+    value["correspondence"] = correspondence
     return json.dumps(value, default=convert)
