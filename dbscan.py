@@ -82,9 +82,9 @@ def convert(o):
     raise TypeError
 
 
-def dbscan1(dict, factor):
+def dbscan1(dict, factor, eps, minpts):
     #labels, count = dbscan(df,{'EMPLOYER_NAME': ['INFOSYS LIMITED', 'TATA CONSULTANCY SERVICES LIMITED'], 'FULL_TIME_POSITION': ['Y']}, ['lon', 'lat'], 2, 10)
-    labels, count = dbscan(df, dict, factor.split(","), 2, 10)
+    labels, count = dbscan(df, dict, factor.split(","), eps, minpts)
     value = {}
     value["label"] = labels
     value["count"] = count

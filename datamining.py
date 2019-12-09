@@ -7,6 +7,7 @@ from apriori import processData
 
 from dbscan import dbscan1
 from user_case1 import pieChart
+from user_case2 import user_case2
 
 app = Flask(__name__)
 
@@ -25,7 +26,16 @@ def apriori():
     itemSize = request.values["Maximum Item Set"]
     column = request.values["Columns"]
 
-    return processData(float(support), int(itemSize), column.split(","))
+    return processData(float(support), int(itemSize), column.split(","))\
+
+
+@app.route('/usercase2', methods=['POST'])
+def user_casetwo():
+    tmp = {}
+    for key in request.values.dicts[1] :
+        tmp[key] = request.values.dicts[1][key].split("|")
+
+    return user_case2(tmp)
 
 @app.route('/dbscan', methods=['POST'])
 def dbscan():
@@ -35,8 +45,14 @@ def dbscan():
         if key == 'factor':
             second = request.values.dicts[1][key]
             continue
+        if key == 'eps':
+            eps =  request.values.dicts[1][key]
+            continue
+        if key == 'minpts':
+            minpts =  request.values.dicts[1][key]
+            continue
         tmp[key] = request.values.dicts[1][key].split("|")
-    return dbscan1(tmp, second)
+    return dbscan1(tmp, second, int(eps), int(minpts))
 
 @app.route('/piechart', methods=['POST'])
 def piechart():

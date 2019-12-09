@@ -52,6 +52,9 @@ debugger;
         }
         var columnList = $('input[name=scancol]').val();
         output["factor"] = columnList;
+        output["eps"] = $('input[name=eps]').val();
+        output["minpts"] = $('input[name=minpts]').val();
+
       $.post("/dbscan",  output,  function (data, status) {
           debugger;
            markerCluster.clearMarkers();
@@ -85,7 +88,7 @@ debugger;
             label: labels[i]
           });
         });
-          var newmark = [];
+          newmark = [];
           for(i = 0; i < locations.length; i++){
               var infoWindow = new google.maps.InfoWindow({
                     content: labels[i],
@@ -132,6 +135,7 @@ debugger;
 			},
          pointRegionClick: function (args) {
          debugger;
+
                 console.log(args.data.region.Region.PointIndex);
         },
     series: scaterData
@@ -156,10 +160,10 @@ $(function () {
 
 
 function clearMarkers() {
-  for (var i = 0; i < markers.length; i++ ) {
-    markers[i].setMap(null);
+  for (var i = 0; i < newmark.length; i++ ) {
+    newmark[i].setMap(null);
   }
-  markers.length = 0;
+  newmark.length = 0;
 }
 $(document).ready(function(){
         $.getJSON('/start',
@@ -305,7 +309,58 @@ $(function () {
          }]
     });
 });
+$(function () {
+    $('#recommandation').bind('click', function () {
 
+        debugger;
+        var output = {};
+        for (var ab in graph1Reference){
+            var array = graph1Reference[ab];
+            output[ab] = array.join("|")
+        }
+         $.post("/usercase2", output,  function (data, status) {
+             markerCluster.clearMarkers();
+             data = data.substring(1);
+             data = data.substring(0, data.length - 1);
+             var a=  data.split("],");
+             var locations = [];
+             var labels = [];
+             newmark = [];
+             for(i = 0 ; i < a.length ; i ++ ){
+                 a[i] = a[i].replace("[","");
+                 a[i] = a[i].split(", ");
+                 for(j = 0 ; j < a[i].length ; j ++){
+                     if(a[i][j][0] === "\""){
+                                       a[i][j] = a[i][j].substring(1);
+                     a[i][j] = a[i][j].substring(0, a[i][j].length - 1);
+                     }
+                 }
+                 var loc = {};
+              loc["lng"] =  parseFloat(a[i][3]);
+              loc["lat"] =  parseFloat(a[i][2]);
+              labels.push(a[i].join("\n"));
+              locations.push(loc);
+              var infoWindow = new google.maps.InfoWindow({
+                    content: labels[i],
+                });
+              var marker = new google.maps.Marker({
+                position: locations[i],
+             });
+              newmark.push(marker);
+              google.maps.event.addListener(marker, 'click', (function(mm, tt) {
+            return function() {
+                infoWindow.setContent(tt);
+                infoWindow.open(map, mm);
+            }
+            })(marker, labels[i]));
+             }
+             debugger;
+             markerCluster = new MarkerClusterer(map, newmark,
+             {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+         });
+    });
+});
 //update to listview with aporir
 $(function () {
     $( "#target" ).submit(function () {
