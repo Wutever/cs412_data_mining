@@ -50,15 +50,17 @@ debugger;
             var array = graph1Reference[ab];
             output[ab] = array.join("|")
         }
+        var columnList = $('input[name=scancol]').val();
+        output["factor"] = columnList;
       $.post("/dbscan",  output,  function (data, status) {
           debugger;
-            //clearMarkers();
            markerCluster.clearMarkers();
             var info = JSON.parse(data);
            var label = info["label"];
           var count = info["count"];
           var locations = [];
           var labels = [];
+           totalData = {};
           for (var value in label){
               labels.push(label[value].toString());
               var loc = {};
@@ -66,24 +68,93 @@ debugger;
               loc["lng"] =  parseFloat(locarray[0]);
               loc["lat"] =  parseFloat(locarray[1]);
               locations.push(loc);
+              if(totalData.hasOwnProperty(label[value])){
+                totalData[label[value]].push({ x: parseFloat(locarray[0]) , y: parseFloat(locarray[1]) });
+             }
+             else{
+                 totalData[label[value]] = Array(1);
+                 totalData[label[value]][0] =  { x: parseFloat(locarray[0]) , y: parseFloat(locarray[1]) }
+             }
+
+
+
           }
           var markers = locations.map(function(location, i) {
           return new google.maps.Marker({
             position: location,
             label: labels[i]
           });
-
-
-
         });
-         markerCluster = new MarkerClusterer(map, markers,
+          var newmark = [];
+          for(i = 0; i < locations.length; i++){
+              var infoWindow = new google.maps.InfoWindow({
+                    content: labels[i],
+                });
+              var marker = new google.maps.Marker({
+                position: locations[i],
+                label:labels[i]
+             });
+              newmark.push(marker);
+              google.maps.event.addListener(marker, 'click', (function(mm, tt) {
+            return function() {
+                infoWindow.setContent(tt);
+                infoWindow.open(map, mm);
+            }
+            })(marker, labels[i]));
+          }
+         markerCluster = new MarkerClusterer(map, newmark,
              {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+
+
+
+
+         var scaterData = [];
+	    for(var key in totalData){
+
+	        var tt = {};
+	        tt["dataSource"] = totalData[key];
+	        tt["type"] = 'scatter';
+	        tt["name"] = key;
+	         tt["xName"] = "x";
+	         tt["yName"] = "y";
+	         scaterData.push(tt);
+        }
+	   var tt = output["factor"].split(",");
+     $("#container2").ejChart({
+         primaryXAxis:
+            {
+                title: { text: tt[0] }
+			},
+            primaryYAxis:
+            {
+                title: { text:tt[1]  },
+			},
+         pointRegionClick: function (args) {
+         debugger;
+                console.log(args.data.region.Region.PointIndex);
+        },
+    series: scaterData
+                });
+
 
 
       });
         return false;
     });
 });
+
+$(function () {
+    $('#clear').bind('click', function () {
+        graph1Reference = {};
+        $('input[name=Columns]').val("");
+        $('input[name=col]').val("");
+        $('input[name=scancol]').val("");
+        $("#area").val("");
+            });
+});
+
+
 function clearMarkers() {
   for (var i = 0; i < markers.length; i++ ) {
     markers[i].setMap(null);
@@ -120,6 +191,7 @@ $("#Spreadsheet").ejSpreadsheet({
         columnList=columnList.concat(value);
         $('input[name=Columns]').val(columnList);
         $('input[name=col]').val(columnList);
+        $('input[name=scancol]').val(columnList);
         console.log(value)
     },
     showRibbon: false
@@ -225,28 +297,12 @@ $(function () {
         zooming: {enable: true},
          series: [{
              type: 'scatter',
-           marker: {
-             dataLabel: {
-                //Enable data label in the chart
-                visible: true
-             }
-           },
-          tooltip: {
-               visible: true
-           },
             selectionSettings: {
              // enable the selection settings
              mode: 'point',
              enable: true
           }
-         }],
-        primaryXAxis: {
-            labelIntersectAction : 'trim',
-                font : {
-                        fontFamily : 'Segoe UI',
-                        size : '10px',
-                },
-            }
+         }]
     });
 });
 
@@ -312,14 +368,12 @@ $(function () {
         output["second"] = $('input[name=col]').val();
         $.post("/piechart", output,  function (data, status) {
             debugger;
-            var he = {};
-            he["test"] = 3;
-            he["test2"] = 3;
-            test = [];
-            for (var key in he){
+            var test = [];
+            data = JSON.parse(data);
+            for (var key in data){
                 var data3 = {};
                 data3["x"] = key;
-                data3["y"] = he[key];
+                data3["y"] = data[key];
                 test.push(data3)
             }
             $("#container3").ejChart({

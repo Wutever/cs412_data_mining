@@ -6,6 +6,7 @@ from flask import Flask, escape, request
 from apriori import processData
 
 from dbscan import dbscan1
+from user_case1 import pieChart
 
 app = Flask(__name__)
 
@@ -31,8 +32,11 @@ def dbscan():
 
     tmp = {}
     for key in request.values.dicts[1] :
+        if key == 'factor':
+            second = request.values.dicts[1][key]
+            continue
         tmp[key] = request.values.dicts[1][key].split("|")
-    return dbscan1(tmp)@app.route('/dbscan', methods=['POST'])
+    return dbscan1(tmp, second)
 
 @app.route('/piechart', methods=['POST'])
 def piechart():
@@ -41,9 +45,10 @@ def piechart():
     for key in request.values.dicts[1] :
         if key == 'second':
             second = request.values.dicts[1][key]
+            continue
         tmp[key] = request.values.dicts[1][key].split("|")
 
-    return "test"
+    return pieChart(tmp, second)
 
 
 @app.route('/start')

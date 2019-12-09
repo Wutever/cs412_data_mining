@@ -18,15 +18,15 @@ def user_case1(data, dic, col_name):
     return ret1, ret2
 
 
-count, proportion = user_case1(data, {'Trip_Type': ['Leisure trip'], 'Traveler_Type': ['Solo traveler', 'Couple']}, 'Stay_Period')
+
 
 def convert(o):
     if isinstance(o, np.int64): 
     	return int(o)  
     raise TypeError
 
-count = json.dumps(count, default=convert)
-print(count)
 
-proportion = json.dumps(proportion, default=convert)
-print(proportion)
+def pieChart(dict, col):
+    count, proportion = user_case1(data, dict,col)
+    return json.dumps(count, default=convert)
+
