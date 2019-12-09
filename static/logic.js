@@ -185,19 +185,81 @@ $(document).ready(function(){
                 var array =Object.values(data);
                 var settings = { dataSource: array, showHeader: "true", startCell: "A1" };
                 excelObj.updateRange(1, settings);
-                excelObj.XLResize.fitWidth([...Array(15).keys()].map(x => x++))
+                excelObj.XLResize.fitWidth([...Array(15).keys()].map(x => x++));
+                excelObj.sheetRename("hotel_cleaned");
                 excelObj.addNewSheet();
             });
-                $.getJSON('/starts',
+                $.getJSON('/netherlands',
             function (data) {
                 //do nothing
                 var excelObj = $("#Spreadsheet").data("ejSpreadsheet");
                 var array =Object.values(data);
                 var settings = { dataSource: array, showHeader: "true", startCell: "A1" };
                 debugger
-                excelObj.addNewSheet();
                 excelObj.updateRange(2, settings);
-                 excelObj.XLResize.fitWidth([...Array(15).keys()].map(x => x++))
+                excelObj.sheetRename("netherlands");
+                 excelObj.XLResize.fitWidth([...Array(15).keys()].map(x => x++));
+                 excelObj.addNewSheet();
+            });
+                $.getJSON('/united_kingdom',
+            function (data) {
+                //do nothing
+                var excelObj = $("#Spreadsheet").data("ejSpreadsheet");
+                var array =Object.values(data);
+                var settings = { dataSource: array, showHeader: "true", startCell: "A1" };
+                debugger
+                excelObj.updateRange(3, settings);
+                excelObj.sheetRename("united_kingdom");
+                 excelObj.XLResize.fitWidth([...Array(15).keys()].map(x => x++));
+                 excelObj.addNewSheet();
+            });
+                $.getJSON('/france',
+            function (data) {
+                //do nothing
+                var excelObj = $("#Spreadsheet").data("ejSpreadsheet");
+                var array =Object.values(data);
+                var settings = { dataSource: array, showHeader: "true", startCell: "A1" };
+                debugger
+                excelObj.updateRange(4, settings);
+                 excelObj.sheetRename("france");
+                 excelObj.XLResize.fitWidth([...Array(15).keys()].map(x => x++));
+                 excelObj.addNewSheet();
+            });
+             $.getJSON('/spain',
+            function (data) {
+                //do nothing
+                var excelObj = $("#Spreadsheet").data("ejSpreadsheet");
+                var array =Object.values(data);
+                var settings = { dataSource: array, showHeader: "true", startCell: "A1" };
+                debugger
+                excelObj.updateRange(5, settings);
+                 excelObj.sheetRename("spain");
+                 excelObj.XLResize.fitWidth([...Array(15).keys()].map(x => x++));
+                 excelObj.addNewSheet();
+            });
+             $.getJSON('/italy',
+            function (data) {
+                //do nothing
+                var excelObj = $("#Spreadsheet").data("ejSpreadsheet");
+                var array =Object.values(data);
+                var settings = { dataSource: array, showHeader: "true", startCell: "A1" };
+                debugger
+                excelObj.updateRange(6, settings);
+                 excelObj.sheetRename("italy");
+                 excelObj.XLResize.fitWidth([...Array(15).keys()].map(x => x++));
+                 excelObj.addNewSheet();
+            });
+             $.getJSON('/austria',
+            function (data) {
+                //do nothing
+                var excelObj = $("#Spreadsheet").data("ejSpreadsheet");
+                var array =Object.values(data);
+                var settings = { dataSource: array, showHeader: "true", startCell: "A1" };
+                debugger
+                excelObj.updateRange(7, settings);
+                 excelObj.sheetRename("austria");
+                 excelObj.XLResize.fitWidth([...Array(15).keys()].map(x => x++));
+                 excelObj.addNewSheet();
             });
 
         return false;

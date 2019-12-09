@@ -12,7 +12,12 @@ from user_case2 import user_case2
 app = Flask(__name__)
 
 csv_file = os.path.join(os.getcwd(), "parsed1.json")
-csv_file2 = os.path.join(os.getcwd(), "parsed2.json")
+csv_file2 = os.path.join(os.getcwd(), "netherlands.json")
+csv_file3 = os.path.join(os.getcwd(), "united_kingdom.json")
+csv_file4 = os.path.join(os.getcwd(), "france.json")
+csv_file5 = os.path.join(os.getcwd(), "spain.json")
+csv_file6 = os.path.join(os.getcwd(), "italy.json")
+csv_file7 = os.path.join(os.getcwd(), "austria.json")
 
 index = "hotel_cleaned.csv"
 
@@ -79,9 +84,44 @@ def start():
     return data
 
 
-@app.route('/starts')
-def starts():
+@app.route('/netherlands')
+def netherlands():
     with open(csv_file2, "r") as file:
+        data = json.load(file)
+    return data
+
+
+@app.route('/united_kingdom')
+def united_kingdom():
+    with open(csv_file3, "r") as file:
+        data = json.load(file)
+    return data
+
+
+@app.route('/france')
+def france():
+    with open(csv_file4, "r") as file:
+        data = json.load(file)
+    return data
+
+
+@app.route('/spain')
+def spain():
+    with open(csv_file5, "r") as file:
+        data = json.load(file)
+    return data
+
+
+@app.route('/italy')
+def italy():
+    with open(csv_file6, "r") as file:
+        data = json.load(file)
+    return data
+
+
+@app.route('/austria')
+def austria():
+    with open(csv_file7, "r") as file:
         data = json.load(file)
     return data
 
