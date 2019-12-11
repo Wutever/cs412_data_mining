@@ -39,13 +39,25 @@ def apriori(data, threshold, length, columns = None):
     return data, itemsets, attributes, candidates, itemsets_with_support
 
         
-def apriori_1(data, threshold):
+def apriori_1(data, support):
+    """ 
+    First iteration of Apriori.
+  
+    Parameters: 
+    data (pandas dataframe): Description of arg1 
+    support (int):
+
+    Returns: 
+    data:
+    itemsets:
+    attributes:
+    """
     
     itemsets = {}
     for i in range(len(data.columns)):
         column = data.iloc[:, i]
         values = column.unique()
-        frequent = column.value_counts()[column.value_counts() / n_rows > threshold]
+        frequent = column.value_counts()[column.value_counts() / n_rows > support]
         indices = list(frequent.index)
         values = list(frequent.values)
         items = dict(zip(indices, values))
@@ -56,90 +68,80 @@ def apriori_1(data, threshold):
     for key, value in itemsets.items():
         attributes[key] = set(value)
         
-    reverse = {}
-    for key, value in itemsets.items():
-        for item in value:
-            reverse[item] = key
-        
-    candidates = set([])
-    for single_comb in list(itertools.combinations(attributes.keys(), 2)):
-        
-        list_list = []
-        for col in list(single_comb):
-            list_list.append(list(attributes[col]))
-            
-        for one in list(itertools.product(*list_list)):
-            check = one
-            flag = 0
-            for i in check:
-                if i not in reverse:
-                    flag = 1
-                    break
-            if flag == 0:
-                candidates.add(one)
-        
-    return data, itemsets, attributes, candidates
-
-
-def apriori_n(data, length_nminus1_itemsets, attribute_list, length_n_candidates, threshold, n):
-
-    for key, value in attribute_list.items():
+    ## Filters dataframe to eliminate infrequent values
+    for key, value in attributes.items():
         data = data[data[key].isin(value)]
-        
+
+    return data, itemsets, attributes
+
+
+def apriori_n(data, attribute_list, support, n):
+    """ 
+    Nth iteration of Apriori.
+  
+    Parameters: 
+    data (pandas dataframe): Description of arg1
+    attribute_list:
+    support (int):
+    n (int):
+
+    Returns: 
+    data:
+    itemsets:
+    attributes:
+    """
+      
+    
+    ## Constructs collection of frequent itemsets
+    ## itemsets: key - index tuple, value - list of frequent itemsets tuple
     itemsets = {}
-    for item in list(itertools.combinations(attribute_list.keys(), n)):
+    for item in list(itertools.combinations(attribute_list.keys(), n)): # Makes a combination of n attributes
         frequent = []
-        grouped = data.groupby(list(item)).count().iloc[:,0] / n_rows > threshold
-        for index in grouped[grouped[grouped.index] == True].index:
+        grouped = data.groupby(list(item)).count().iloc[:,0] / n_rows > support # Groups data by attribute and filters only itemsets occuring above threshold
+        for index in grouped[grouped[grouped.index] == True].index: # Extracts frequent indices
             frequent.append(index)
         itemsets[item] = frequent
-        
+    
+    
+    ## Constructs collection of frequent itemsets with support
+    ## itemsets_with_support: key - index tuple, value - dictionary of frequent itemsets with attribute as key and count as value
     itemsets_with_support = {}
-    for item in list(itertools.combinations(attribute_list.keys(), n)):
-        if 'CASE_STATUS' in item:
-            continue
-        frequent = data.groupby(list(item)).count().iloc[:,0]
-        grouped = frequent / n_rows > threshold
-        frequent = frequent[grouped]
+    for item in list(itertools.combinations(attribute_list.keys(), n)): # Makes a combination of n attributes
+        frequent = data.groupby(list(item)).count().iloc[:,0] # Groups data by attribute
+        frequent = frequent[frequent / n_rows > support] # Filters only itemsets occuring above threshold
         indices = list(frequent.index)
         values = list(frequent.values)
-        items = dict(zip(indices, values))
-        itemsets_with_support[item] = items    
-    
+        items = dict(zip(indices, values)) # Constructs dictionary with attribute as key and count as value
+        itemsets_with_support[item] = items 
+        
+        
+    ## Constructs collection of frequent attributes
+    ## attributes: key - column name, value - set of frequent attributes
     attributes = {}
-    for key, arr in itemsets.items():
+    for key, arr in itemsets.items(): 
         for k in key:
             if k not in attributes:
-                attributes[k] = set([])
+                attributes[k] = set([]) # Builds a set for each column name
         for k in key:
             for value in arr:
                 for i in range(len(value)):
-                    attributes[key[i]].add(value[i])
-                    attributes[key[i]].add(value[i])
-                    
-    reverse = {}
+                    attributes[key[i]].add(value[i]) # Adds freqent attributes to sets
+    
+    
+    ## Constructs collection of combinations of frequent attributes
+    ## reverse: set of multi-indices
+    reverse = set()
     for key, value in itemsets.items():
         for item in value:
-            reverse[item] = key
-            
-    candidates = set([])
-    for single_comb in list(itertools.combinations(attribute_list.keys(), n+1)):
-        
-        list_list = []
-        for col in list(single_comb):
-            list_list.append(list(attribute_list[col]))
-            
-        for one in list(itertools.product(*list_list)):
-            check = list(itertools.combinations(list(one), n))
-            flag = 0
-            for i in check:
-                if i not in reverse:
-                    flag = 1
-                    break
-            if flag == 0:
-                candidates.add(one)
+            reverse.add(item)
     
-    return data, itemsets, attributes, candidates, itemsets_with_support
+    
+    ## Filters dataframe to eliminate infrequent values
+    for key, value in attributes.items():
+        data = data[data[key].isin(value)]
+        
+        
+    return data, itemsets, attributes, itemsets_with_support
 
 data = pd.read_csv('hotel_cleaned.csv')
 n_rows = len(data.index)
@@ -168,9 +170,6 @@ def processData( threshold, length, column):
 # Implement print pretty
 # Identify case status
 # Display item support
-
-####################################################### TODOs #######################################################
-
 # Try algorithm on different datasets
 # Eliminate highly correlated columns
 # Improve time complexity
@@ -184,4 +183,3 @@ def processData( threshold, length, column):
 #   (FIXED) 1. itemsets do not display properly for thresholds >= 0.02
 #   (FIXED) 2. gets 'single positional indexer is out-of-bounds' error for n = len(data.columns)
 #   (FIXED) 3. strings with multiple words are split when printing with PrettyPrinter
-#           4. dataframe is filtered incorrectly and overlooks attributes
