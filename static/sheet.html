@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Essential Studio for JavaScript  theme reference -->
+    <link rel="stylesheet" href="http://cdn.syncfusion.com/17.3.0.9/js/web/flat-azure/ej.web.all.min.css"/>
+    <!--  jquery script  -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://cdn.syncfusion.com/js/assets/external/jquery.globalize.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+    <!--  jsrender script  -->
+    <script src="http://cdn.syncfusion.com/js/assets/external/jsrender.min.js"></script>
+    <!-- Essential JS UI widget -->
+    <script src="http://cdn.syncfusion.com/17.3.0.9/js/web/ej.web.all.min.js"></script>
+    <!--Add custom scripts here -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcEu9p3LmmKdBZEq7emIksDjz2NVnw_AQ&callback=initMap"
+    async defer></script>
+     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <style>
+        #map {
+        height: 30%;
+          width : 30%
+      }
+        * {
+            box-sizing: border-box;
+        }
+        .header {
+            min-height: 8vh;
+            padding: 15px;
+        }
+
+        .scheme {
+            width: 50%;
+            min-height: 5vh;
+            float: left;
+            padding: 15px;
+        }
+
+        .menu {
+            width: 75%;
+            float: left;
+            padding: 15px;
+        }
+
+        .main {
+            width: 50%;
+            min-height: 42vh;
+            float: left;
+            padding: 15px;
+            grid-template-rows: 50% 50%;
+        }
+        .submain {
+            width: 25%;
+            min-height: 42vh;
+            float: left;
+            padding: 15px;
+            grid-template-rows: 50% 50%;
+        }
+
+        .side {
+            width: 25%;
+            min-height: 42vh;
+            float: left;
+            padding: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Data Mining SpreadSheet</h1>
+            <input id = "clear" type="submit" value="clear input"/>
+            Wanted Information:
+          <input id="winfo" type="text" name="winfo" value="Hotel_Name,Hotel_Address,lat,lng,Average_Score">
+        <input id = "recommandation" type="submit" value="Run Recommendation">
+</div>
+<div class=scheme>
+    <form id="target" >
+          Support in Ratio:
+          <input type="text" name="Support in Ratio" value="0.001">
+          Maximum Item Set:
+          <input type="text" name="Maximum Item Set" value="5">
+        Columns:
+        <input type="text" name="Columns">
+          <input type="submit" value="Execute">
+    </form>
+
+</div>
+<div class=scheme>
+</div>
+        <textarea rows="5" cols="50" name="comment" id = "area"></textarea>
+    <form id="acRule" >
+          Asociation rule with
+          <input type="text" name="col" value="">
+          <input type="submit" value="Execute">
+    </form>
+
+
+        eps:
+          <input id="eps" type="text" name="eps" value="2">
+         minpts:
+          <input id="minpts"type="text" name="minpts" value="10">
+        Columns:
+        <input type="text" name="scancol">
+         <input id = "test" type="submit" value="db scan"/>
+
+<div class=main id="container1" ></div>
+<div class=submain id="container3" ></div>
+<div class=submain id="container2" ></div>
+<div class=main id="map"></div>
+
+
+<div class='menu' id="Spreadsheet"></div>
+
+<div class=side>
+                Sheet Index:
+        <input type="text" name="currentindex" value = "1">
+             <input id = "curindex" type="submit" value="update"/>
+    <p>choose column</p>
+    <div id="defaultListView" data-ej-allowScrolling=true>
+
+    </div>
+</div>
+
+<script>
+$(document).ready(function(){
+    $("#defaultListView").ejListView({
+        mouseDown: function (args) { //handle the event
+            debugger;
+            if(isSecond === 0){
+                isSecond = 1;
+                firstIndex= args.index;
+                tmpdata = []
+                for( var entry in itemSet_Frequency[args.index]){
+                      tmpdata.push({"ItemSizeName" : itemSet_Frequency[args.index][entry]["ItemSizeName"], "Count" :  itemSet_Frequency[args.index][entry]["Count"].length});
+                }
+                graph1Source = tmpdata;
+                $("#container1").ejChart({
+                 series: [{
+                     dataSource: tmpdata,
+                  xName: "ItemSizeName",
+                    yName: "Count"
+                 }]
+            });
+            }
+            else{
+                 isSecond = 0;
+                 graph1Source = itemSet_Frequency[firstIndex][args.index];
+                 $("#container1").ejChart({
+                 series: [{
+                     dataSource: itemSet_Frequency[firstIndex][args.index]["Count"],
+                  xName: "ItemSizeName",
+                    yName: "Count"
+                 }]
+            });
+            }
+
+        }
+    });
+});
+</script>
+<script src="logic.js"></script>
+</body>
+</html>
